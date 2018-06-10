@@ -20,30 +20,30 @@ function toObjectArray(arr) {
 }
 
 const projectFields = [
-  'id',
-  'proj_code',
-  'proj_status',
-  'title',
-  'emp_id',
-  'in_start_date',
-  'rv_start_date',
-  'in_end_date',
-  'rv_end_date',
-  'activebool',
-  'cost_center_xcharge',
-  'proj_approver',
-  'appr_status',
-  'written_approval',
-  'proj_bd_lead',
-  'box_link',
-  'ihs_service_line',
-  'bu_name',
-  'objectives',
-  'speciality',
-  'department',
-  'ihs_bd_lead',
-  'proj_appr_name',
-  'cross_charge'
+  'id',//0
+  'proj_code',//1
+  'proj_status',//2
+  'title',//3
+  'emp_id',//4
+  'in_start_date',//5
+  'rv_start_date',//6
+  'in_end_date',//7
+  'rv_end_date',//8
+  'activebool',//9
+  'cost_center_xcharge',//10
+  'proj_approver',//11
+  'appr_status',//12
+  'written_approval',//13
+  'proj_bd_lead',//14
+  'box_link',//15
+  'ihs_service_line',//16
+  'bu_name',//17
+  'objectives',//18
+  'speciality',//19
+  'department',//20
+  'ihs_bd_lead',//21
+  'proj_appr_name',//22
+  'cross_charge'//23
 ]
 
 function getData(project) {
@@ -245,38 +245,37 @@ class GeneralInfo extends React.Component {
               this.state.data ? this.state.data.map((item, index) => (
                 <tr key={index} className="">
                   <td className="width-500 valign height-53">{item.key}</td>
-                  {!this.state.edit ?
-                    <td className='valign'>
-                    { index == 9 && item.value ? 'True'
-                    : index == 9 ? 'False'
-                    : item.value}
-                    </td>
-                  : <td className='valign'>
-                      {index == 2 || index == 4 || index == 9 || index == 11 || index == 12 || index == 13 || index == 14 || index == 16 || index == 17 || index == 18 || index == 19 || index == 20 || index == 23 ?
-                        <VirtualizedSelect ref="countrySelect"
+                  {this.state.edit?
+
+                      <td className='valign'>
+                      {item.key == 'ID' || item.key == 'Project Code'?this.state.data[index].value:
+                         item.key == 'Project Status' || item.key == 'IHS Project Lead' || item.key == 'Approver / cost center owner' || item.key == 'Approval status' || item.key == 'Written approval' || item.key == 'IHS BD lead' || item.key == 'IHS Service Line' || item.key == 'Medtronic BU involved' || item.key == 'Objectives' || item.key == 'Specialty' || item.key == 'Department' || item.key == 'Cross Charge' ?
+                         <VirtualizedSelect ref="countrySelect"
                           options={this.state.options[index]}
                           simpleValue
                           value={this.state.data[index].label}
                           onChange={this.handleSelect(index)}
-                          labelKey={index == 4 || index == 11 || index == 14 ? "name" : "value"}
-                          valueKey={index == 4 || index == 11 || index == 14 ? "emp_id" : "label"}
+                          labelKey={item.key == 'IHS Project Lead' || item.key == 'Approver / cost center owner' || item.key == 'IHS BD lead' ? "name" : "value"}
+                          valueKey={item.key == 'IHS Project Lead' || item.key == 'Approver / cost center owner' || item.key == 'IHS BD lead' ? "emp_id" : "label"}
                           clearable={false}
                           style={{fontSize: 12, width: 132}}
                           menuContainerStyle={{fontSize: 12, width: 132}}
-                        />
-                      : index == 5 || index == 6 || index == 7 || index == 8 ?
+                        />:item.key == 'Start Date (planned)' || item.key == 'Start Date (revised)' || item.key == 'End Date (planned)' || item.key == 'End Date (revised)'?
                         <SingleDatePicker
                           date={this.state.dates[index-5]}
                           onDateChange={date => this.handleSelectDate(date, index-5)}
                           focused={this.state.focused[index - 5]}
                           onFocusChange={focus => this.setFocusedState(focus, index-5)}
                         />
-                      : index == 0 || index == 1 || index == 2 ?
-                        item.value
-                      : <input type="text" className="width-130 form-control" value={this.state.data[index].value} onChange={this.handleChange.bind(this, index)} />
+                        :<input type="text" className="width-130 form-control" value={this.state.data[index].value} onChange={this.handleChange.bind(this, index)} />
                       }
-                    </td>
+                      </td> // edint end
+
+                      :
+                      <td className='valign'>{this.state.data[index].value}</td> // Display Part
                   }
+
+
                 </tr>
               )) : null
             }
